@@ -117,14 +117,16 @@ contract Voting is Ownable {
             }
 
             //if duplicate is found, we increment
-            if (voteMax == proposals[i].voteCount) {
+            if (voteMax == proposals[i].voteCount && proposals.length != 1) {
                 duplicate++;
             }
         }
 
+       require(proposals.length != 0, "0 votes done, please restart the voting session");
         //if duplicate exists, we throw an error
        require(duplicate == 0, "Tie votes, please restart the voting session");
 
+       changeStatus(WorkflowStatus.VotesTallieds);
        return winningProposalId;
     }
 
@@ -156,4 +158,3 @@ contract Voting is Ownable {
         return proposals[winningProposalId];
     }
 }
-
