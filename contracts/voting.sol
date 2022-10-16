@@ -102,7 +102,7 @@ contract Voting is Ownable {
     * @dev Retrieve the winning proposalId
     * @return the proposalId's winner
     */
-    function TallyVote() public returns (uint) {
+    function TallyVote() public returns (uint) public onlyOwner {
         require(status == WorkflowStatus.VotingSessionEnded, "Status for voting is wrong");
 
         uint voteMax;
