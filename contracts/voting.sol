@@ -53,7 +53,7 @@ contract Voting is Ownable {
     * @dev Insert address in whitelist
     * @param _voterAddress address' voter
     */
-    function Whitelist(address _voterAddress) public onlyOwner {
+    function Whitelist(address _voterAddress) external onlyOwner {
         require(!voters[_voterAddress].isRegistered, "This address is already whitelisted !");
         require(_voterAddress != address(0), "You cannot transfer to the address zero");
         require(status == WorkflowStatus.RegisteringVoters, "Status is wrong");
@@ -69,7 +69,7 @@ contract Voting is Ownable {
     * @param _voterAddress address' voter
     * @param _description content of proposal
     */
-    function RegisterProposal(address _voterAddress, string calldata _description) public {
+    function RegisterProposal(address _voterAddress, string calldata _description) external {
         require(status == WorkflowStatus.ProposalsRegistrationStarted, "Status for registration is wrong");
         require(_voterAddress != address(0), "You cannot transfer to the address zero");
         require(voters[_voterAddress].isRegistered, "Address is not in withelist");
@@ -85,7 +85,7 @@ contract Voting is Ownable {
     * @param _voterAddress address' voter
     * @param _proposalId proposalId
     */
-    function VoteSession(address _voterAddress, uint _proposalId) public {
+    function VoteSession(address _voterAddress, uint _proposalId) external {
         require(status == WorkflowStatus.VotingSessionStarted, "Status for voting is wrong");
         require(_voterAddress != address(0), "You cannot transfer to the address zero");
         require(voters[_voterAddress].isRegistered, "Address is not in withelist");
@@ -102,7 +102,7 @@ contract Voting is Ownable {
     * @dev Retrieve the winning proposalId
     * @return the proposalId's winner
     */
-    function TallyVote() public returns (uint) public onlyOwner {
+    function TallyVote() external onlyOwner returns (uint) {
         require(status == WorkflowStatus.VotingSessionEnded, "Status for voting is wrong");
 
         uint voteMax;
@@ -130,11 +130,10 @@ contract Voting is Ownable {
        return winningProposalId;
     }
 
-
     /** 
     * @dev Restart session if tie votes 
     */
-    function RestartVoteSession() public onlyOwner {
+    function RestartVoteSession() external onlyOwner {
         status = WorkflowStatus.VotingSessionStarted;
 
         for (uint i = 0; i < arrayAddress.length; i++) {
@@ -151,8 +150,9 @@ contract Voting is Ownable {
     * @param _voterAddress address' voter
     * @return winning proposal
     */
-    function getWinner(address _voterAddress) public view returns (Proposal memory){
+    function getWinner(address _voterAddress) public view returns (Proposal memory) {
         require(status == WorkflowStatus.VotesTallieds, "Status for voting is wrong");
+        require(_voterAddress != address(0), "You cannot transfer to the address zero");
         require(voters[_voterAddress].isRegistered, "Address is not in withelist");
 
         return proposals[winningProposalId];
