@@ -150,7 +150,7 @@ contract Voting is Ownable {
     * @param _voterAddress address' voter
     * @return winning proposal
     */
-    function getWinner(address _voterAddress) public view returns (Proposal memory) {
+    function GetWinner(address _voterAddress) public view returns (Proposal memory) {
         require(status == WorkflowStatus.VotesTallieds, "Status for voting is wrong");
         require(_voterAddress != address(0), "You cannot transfer to the address zero");
         require(voters[_voterAddress].isRegistered, "Address is not in withelist");
