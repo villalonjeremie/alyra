@@ -114,10 +114,11 @@ contract Voting is Ownable {
                 //reset the duplicate
                 duplicate = 0;
                 winningProposalId = i;
+                break;
             }
 
             //if duplicate is found, we increment
-            if (voteMax == proposals[i].voteCount && proposals.length != 1) {
+            if (voteMax == proposals[i].voteCount && proposals.length != 1 && voteMax != 0) {
                 duplicate++;
             }
         }
