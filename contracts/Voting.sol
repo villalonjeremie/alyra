@@ -114,7 +114,7 @@ contract Voting is Ownable {
                 //reset the duplicate
                 duplicate = 0;
                 winningProposalId = i;
-                break;
+                continue;
             }
 
             //if duplicate is found, we increment
