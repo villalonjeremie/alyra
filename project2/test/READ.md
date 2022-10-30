@@ -7,11 +7,11 @@ of simple testing system for Solidity smart
 contracts.
 ```
 ##  Testing Structure: 
-1.Testing Setter/Getter
-2.Testing status of voting session
-3.Testing function setVote and function tallyVote
-4.Testing all events
-5.Testing reverts
+1. Testing Setter/Getter
+2. Testing status of voting session
+3. Testing function setVote and function tallyVote
+4. Testing all events
+5. Testing reverts
 
 ```
 Contract: Voting
