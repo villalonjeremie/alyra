@@ -3,7 +3,7 @@
 
 ```
 This suite of test cases is the complete demonstration 
-of simple testing system for Solidity smart 
+of voting system for Solidity smart 
 contracts.
 ```
 ##  Testing Structure: 
