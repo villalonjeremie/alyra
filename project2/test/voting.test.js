@@ -46,30 +46,30 @@ contract("Voting", accounts => {
 
   describe("Testing status", function () {
     before(async function () {
-      VotingInstance = await Voting.new({from: _owner});
+      VotingInstance = await Voting.new({ from: _owner });
     });
 
     it("retrieve proposalsRegistrationStarted status", async () => {
       await VotingInstance.startProposalsRegistering();
-      const status = await VotingInstance.workflowStatus.call({from: _owner})
+      const status = await VotingInstance.workflowStatus.call({ from: _owner })
       expect(status).to.be.bignumber.equal(_proposalsRegistrationStarted);
     });
 
     it("retrieve proposalsRegistrationEnded status", async () => {
       await VotingInstance.endProposalsRegistering();
-      const status = await VotingInstance.workflowStatus.call({from: _owner})
+      const status = await VotingInstance.workflowStatus.call({ from: _owner })
       expect(status).to.be.bignumber.equal(_proposalsRegistrationEnded);
     });
 
     it("retrieve votingSessionStarted status", async () => {
       await VotingInstance.startVotingSession();
-      const status = await VotingInstance.workflowStatus.call({from: _owner})
+      const status = await VotingInstance.workflowStatus.call({ from: _owner })
       expect(status).to.be.bignumber.equal(_votingSessionStarted);
     });
 
     it("retrieve votingSessionEnded status", async () => {
       await VotingInstance.endVotingSession();
-      const status = await VotingInstance.workflowStatus.call({from: _owner})
+      const status = await VotingInstance.workflowStatus.call({ from: _owner })
       expect(status).to.be.bignumber.equal(_votingSessionEnded);
     });
   });
@@ -87,34 +87,34 @@ contract("Voting", accounts => {
       await VotingInstance.endProposalsRegistering();
     });
 
-    it("should result proposalId at 2", async () => {
+    it("should be the result proposalId at 2", async () => {
       await VotingInstance.startVotingSession();
       await VotingInstance.setVote(2, { from: accounts[1] });
       await VotingInstance.setVote(2, { from: accounts[2] });
       await VotingInstance.setVote(2, { from: accounts[3] });
       await VotingInstance.endVotingSession();
       await VotingInstance.tallyVotes();
-      const winnerId = await VotingInstance.winningProposalID.call({from: _owner});
+      const winnerId = await VotingInstance.winningProposalID.call({ from: _owner });
       expect(winnerId).to.be.bignumber.equal(new BN(2));
     });
 
-    it("should result proposalId at 0 with no vote done", async () => {
+    it("should be the result proposalId at 0 with no vote done", async () => {
       await VotingInstance.startVotingSession();
       await VotingInstance.endVotingSession();
       await VotingInstance.tallyVotes();
-      const winnerId = await VotingInstance.winningProposalID.call({from: _owner});
+      const winnerId = await VotingInstance.winningProposalID.call({ from: _owner });
       expect(winnerId).to.be.bignumber.equal(new BN(0));
     });
   });
 
   describe("Testing events", function () {
     before(async function () {
-      VotingInstance = await Voting.new({from: _owner});
+      VotingInstance = await Voting.new({ from: _owner });
     });
 
     it("get VoterRegistered event", async () => {
       const findEvent = await VotingInstance.addVoter(accounts[1], { from: _owner });
-      expectEvent(findEvent, "VoterRegistered", { voterAddress: accounts[1]} );
+      expectEvent(findEvent, "VoterRegistered", { voterAddress: accounts[1] });
     });
 
     it("get VoterRegistered event", async () => {
@@ -130,14 +130,14 @@ contract("Voting", accounts => {
     });
 
     it("get Voted event", async () => {
-      const findEvent = await VotingInstance.setVote(1, { from: accounts[1] } );
+      const findEvent = await VotingInstance.setVote(1, { from: accounts[1] });
       expectEvent(findEvent, "Voted", { voter: accounts[1], proposalId: new BN(1) });
     });
   });
 
   describe("Testing revert", function () {
     before(async function () {
-      VotingInstance = await Voting.new({from: _owner});
+      VotingInstance = await Voting.new( {from: _owner} );
     });
 
     it("should not add an already registered voter, revert", async () => {
@@ -146,7 +146,7 @@ contract("Voting", accounts => {
       await expectRevert(VotingInstance.addVoter(accounts[1], { from: _owner }), 'Already registered');
     });
 
-    it("should not a proposal registration session, revert", async () => {
+    it("should not be a proposal registration session, revert", async () => {
       await expectRevert(VotingInstance.addProposal(_proposal1, { from: accounts[1] }), 'Proposals are not allowed yet');
     });
 
@@ -159,11 +159,11 @@ contract("Voting", accounts => {
       await expectRevert(VotingInstance.addProposal("", { from:  accounts[1] }), 'Vous ne pouvez pas ne rien proposer');
     });
 
-    it("should not voting session, revert", async () => {
+    it("should not be voting session, revert", async () => {
       await expectRevert(VotingInstance.setVote(1, { from:  accounts[1] }), 'Voting session havent started yet');
     });
 
-    it("should not a vote already done, revert", async () => {
+    it("should not be a vote already done, revert", async () => {
       await VotingInstance.addProposal(_proposal1, { from: accounts[1] });
       await VotingInstance.addProposal(_proposal2, { from: accounts[2] });
       await VotingInstance.endProposalsRegistering();
@@ -180,7 +180,7 @@ contract("Voting", accounts => {
       await expectRevert(VotingInstance.tallyVotes({ from:  _owner }), 'Current status is not voting session ended');
     });
 
-    it("should not be a wining proposalId number 2 due to tie vote", async () => {
+    it("should not be a wining proposalId number 2 due to tie vote, first index is kept", async () => {
       await VotingInstance.setVote(2, { from: accounts[2] });
       await VotingInstance.endVotingSession();
       await VotingInstance.tallyVotes();
